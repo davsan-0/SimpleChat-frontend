@@ -1,12 +1,15 @@
 import React from 'react';
 import Divider from '@material-ui/core/Divider';
 import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
 
 import ChatListItem from './ChatListItem';
 
 const useStyles = makeStyles({
     root: {
-      
+      display: "flex",
+      flexDirection: "column",
+      overflow: "auto"
     },
     noChatText: {
         color: "rgba(200, 200, 200, 1)",
@@ -21,15 +24,17 @@ const ChatList = () => {
     const classes = useStyles();
 
     let arr = [<ChatListItem chatName="Chat1" latestMessage={{author: "David", timestamp:"19:05", text:"Hej"}}/>, <ChatListItem chatName="Chat2" latestMessage={{author: "Njetski Baretski", timestamp:"11:33", text:"Nej"}}/>, <ChatListItem chatName="Chat3" latestMessage={{author: "Crab", timestamp:"18:35", text:"Craab"}}/>];
+    //arr = arr.concat(arr).concat(arr);
     arr = arr.map((el, i) => {
         if (i === arr.length - 1) {
             return el;
         }
         return <div>{el}<Divider variant="middle"/></div>;
     });
+    
 
     console.log(arr);
-    arr = [];
+    //arr = [];
 
     return <div className={classes.root}>{(arr.length > 0 && arr) || <div className={classes.noChatText}>No chats available.<br/>Click the + to start a new chat.</div>}</div>;
 }

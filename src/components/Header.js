@@ -76,6 +76,9 @@ const useStyles = makeStyles(theme => ({
       display: 'none',
     },
   },
+  toolbar: {
+    justifyContent: "space-between"
+  }
 }));
 
 const Header = () => {
@@ -161,9 +164,9 @@ const Header = () => {
   );
 
   return (
-    <div className={classes.grow}>
+    <div>
       <AppBar position="static">
-        <Toolbar>
+        <Toolbar className={classes.toolbar}>
           {/*<IconButton
             edge="start"
             className={classes.menuButton}
@@ -188,7 +191,7 @@ const Header = () => {
               inputProps={{ 'aria-label': 'search' }}
             />
             </div>*/}
-          <div className={classes.grow} />
+          <div className={classes.grow}/>
           <div className={classes.sectionDesktop}>
             <IconButton aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={4} color="secondary">

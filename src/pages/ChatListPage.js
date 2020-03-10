@@ -5,12 +5,18 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import Header from '../components/Header';
 import ChatList from '../components/ChatList';
-import BottomNavBar from '../components/BottomNavBar';
 
 const useStyles = makeStyles(theme => ({
+    root: {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-start",
+        overflow: "hidden",
+        height: "100vh"
+    },
     fabButton: {
         position: "absolute",
-        bottom: theme.spacing(10),
+        bottom: theme.spacing(4),
         right: theme.spacing(4),
     }
 }));
@@ -19,13 +25,12 @@ const ChatListPage = () => {
     const classes = useStyles();
 
     return (
-        <div>
+        <div className={classes.root}>
             <Header />
             <ChatList />
             <Fab color="secondary" aria-label="add" className={classes.fabButton}>
                 <AddIcon />
             </Fab>
-            <BottomNavBar/>
         </div>
     )
 }
