@@ -3,7 +3,7 @@ import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
 
 import ChatListItem from "./ChatListItem";
-import { getAllChatsWithUserId } from "../api/api";
+import { getAllChatsWithUserId } from "../../api/api";
 
 const useStyles = makeStyles({
   root: {
@@ -17,10 +17,16 @@ const useStyles = makeStyles({
     textAlign: "center",
     marginTop: "2rem",
     fontStyle: "italic"
+  },
+  chatLink: {
+    textDecoration: "none",
+    "&:focus, &:hover, &:visited, &:link, &:active": {
+      textDecoration: "none"
+    }
   }
 });
 
-const ChatList = () => {
+const ChatList = props => {
   const classes = useStyles();
   const [chats, setChats] = useState([]);
 
@@ -38,7 +44,11 @@ const ChatList = () => {
             : el.name;
         return (
           <div>
-            <ChatListItem chatName={name} latestMessage={el.latestMessage} />
+            <ChatListItem
+              chatName={name}
+              latestMessage={el.latestMessage}
+              to={`/chat/${el.id}`}
+            />
             {i < res.data.length - 1 && <Divider variant="middle" />}
           </div>
         );

@@ -3,8 +3,8 @@ import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import { makeStyles } from "@material-ui/core/styles";
 
-import Header from "../components/Header";
-import ChatList from "../components/ChatList";
+import Header from "../../common/Header";
+import ChatList from "./ChatList";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ChatListPage = () => {
+const ChatListPage = props => {
   const classes = useStyles();
 
   return (

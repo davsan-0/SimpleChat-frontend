@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
-import Header from "../components/Header";
-import { getChatWithId } from "../api/api";
-import ChatTextInput from "../components/ChatTextInput";
-import ChatWindow from "../components/ChatWindow";
+import Header from "../../common/Header";
+import { getChatWithId } from "../../api/api";
+import ChatTextInput from "./ChatTextInput";
+import ChatWindow from "./ChatWindow";
 
 const useStyles = makeStyles({
-  root: {
+  chatPage: {
     display: "flex",
     flexDirection: "column",
+    overflow: "hidden",
+    flexWrap: "nowrap",
     height: "100vh"
   }
 });
 
-const ChatPage = props => {
+const ChatPage = ({ websocket }) => {
   const classes = useStyles();
   const [title, setTitle] = useState();
   const [latestMessage, setLatestMessage] = useState();
@@ -27,12 +29,12 @@ const ChatPage = props => {
   }, []);
 
   return (
-    <div className={classes.root}>
-      <Header title={title} />
+    <div className={classes.chatPage}>
+      <Header title={title} backButton />
       <ChatWindow />
       {/*latestMessage &&
         `${latestMessage.createdAt} ${latestMessage.author.name}: ${latestMessage.text}`*/}
-      <ChatTextInput />
+      <ChatTextInput websocket={websocket} />
     </div>
   );
 };

@@ -14,8 +14,14 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
+import { useHistory } from "react-router-dom";
+
+import BackButton from "./buttons/BackButton";
 
 const useStyles = makeStyles(theme => ({
+  test: {
+    flexShrink: 0
+  },
   grow: {
     flexGrow: 1
   },
@@ -81,10 +87,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Header = ({ title }) => {
+const Header = ({ title, backButton }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+  const history = useHistory();
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -164,9 +171,10 @@ const Header = ({ title }) => {
   );
 
   return (
-    <div>
+    <div classes={classes.test}>
       <AppBar position="static">
         <Toolbar className={classes.toolbar}>
+          {backButton && <BackButton onClick={history.goBack} />}
           {/*<IconButton
             edge="start"
             className={classes.menuButton}

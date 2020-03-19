@@ -3,10 +3,13 @@ import TextField from "@material-ui/core/TextField";
 import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
 
-import SendButton from "./SendButton";
+import SendButton from "../../common/buttons/SendButton";
 
 const useStyles = makeStyles(theme => ({
   chatTextInput: {
+    flexShrink: 0
+  },
+  chatTextForm: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
@@ -25,17 +28,25 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ChatTextInput = props => {
+const ChatTextInput = ({ websocket }) => {
   const classes = useStyles();
   const [input, setInput] = React.useState("");
   const handleChange = event => {
     setInput(event.target.value);
   };
-
+  console.log(websocket);
   const handleSubmit = event => {
-    console.log(input);
-    console.log(event);
+    const text = {
+      id: "c2d80cae-2e12-4a8c-a7ae-47b74c0a16d7",
+      chatId: "d1aab523-7e90-4bf0-b24a-0b3ce208280e",
+      text: input
+    };
     setInput("");
+
+    websocket.publish({
+      destination: "/app/chats/message",
+      body: JSON.stringify(text)
+    });
   };
 
   const handleKeyDown = event => {
@@ -46,10 +57,10 @@ const ChatTextInput = props => {
   };
 
   return (
-    <div>
+    <div className={classes.chatTextInput}>
       <Divider />
       <form
-        className={classes.chatTextInput}
+        className={classes.chatTextForm}
         noValidate
         autoComplete="off"
         onSubmit={handleSubmit}

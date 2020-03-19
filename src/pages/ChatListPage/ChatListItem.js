@@ -6,7 +6,8 @@ import CardContent from "@material-ui/core/CardContent";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import parseDate from "../utils/parseDate";
+import parseDate from "../../utils/parseDate";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
   chatListItem: {
@@ -32,7 +33,7 @@ const useStyles = makeStyles({
   }
 });
 
-const ChatListItem = ({ chatName, latestMessage }) => {
+const ChatListItem = ({ to, chatName, latestMessage }) => {
   const classes = useStyles();
 
   const renderMessage = () => {
@@ -60,7 +61,7 @@ const ChatListItem = ({ chatName, latestMessage }) => {
 
   return (
     <div className={classes.chatListItem}>
-      <CardActionArea>
+      <CardActionArea component={Link} to={to}>
         <CardContent>
           <Typography variant="h6" component="h2" noWrap>
             {chatName}
