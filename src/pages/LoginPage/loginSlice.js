@@ -7,17 +7,26 @@ export const loginSlice = createSlice({
   },
   reducers: {
     login: (state, action) => {
-      const { googleId, imageUrl, name } = action.payload;
+      const { id, imageUrl, name } = action.payload;
       state.value = {
         ...state.value,
-        id: googleId,
+        id: id,
         imageUrl: imageUrl,
         name: name,
         isLoggedIn: true
       };
     },
+    /*login: state => {
+      state.value.isLoggedIn = true;
+    },*/
     logout: state => {
-      state.value = { id: "", imageUrl: "", name: "", isLoggedIn: false };
+      localStorage.removeItem("access_token");
+      state.value = {
+        id: "",
+        imageUrl: "",
+        name: "",
+        isLoggedIn: false
+      };
     }
   }
 });
@@ -25,5 +34,7 @@ export const loginSlice = createSlice({
 export const { login, logout } = loginSlice.actions;
 
 export const selectIsLoggedIn = state => state.user.value.isLoggedIn;
+//export const selectChats = state => state.user.value.chats;
+export const selectUserId = state => state.user.value.id;
 
 export default loginSlice.reducer;

@@ -8,14 +8,39 @@ const api = axios.create({
   baseURL: "http://localhost:8080"
 });
 
+const authHeader = () => {
+  return {
+    headers: { Authorization: localStorage.getItem("access_token") }
+  };
+};
+
+export const getAccessToken = (providerToken, provider) => {
+  return api.post("/auth/providertoken", {
+    token: providerToken,
+    provider: provider
+  });
+};
+
+export const getMe = () => {
+  return api.get("/users/me", authHeader());
+};
+
+export const getMyChats = () => {
+  return api.get("/users/me/chats", authHeader());
+};
+
 export const getUser = () => {
-  api.get(`/users/${TEMP_USER_ID}`);
+  return api.get(`/users/${TEMP_USER_ID}`, authHeader());
 };
 
 export const getChatWithId = id => {
-  return api.get(`/chats/${id}`);
+  return api.get(`/chats/${id}`, authHeader());
 };
 
 export const getAllChatsWithUserId = id => {
-  return api.get(`/users/${id}/chats`);
+  return api.get(`/users/${id}/chats`, authHeader());
+};
+
+export const getChatMessages = (chatId, sort) => {
+  return api.get(`/chats/${chatId}/messages?sort=${sort}`, authHeader());
 };

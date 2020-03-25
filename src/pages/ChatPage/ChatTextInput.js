@@ -2,8 +2,10 @@ import React from "react";
 import TextField from "@material-ui/core/TextField";
 import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
+import { useSelector } from "react-redux";
 
 import SendButton from "../../common/buttons/SendButton";
+import { selectUserId } from "../LoginPage/loginSlice";
 
 const useStyles = makeStyles(theme => ({
   chatTextInput: {
@@ -28,24 +30,26 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ChatTextInput = ({ websocket }) => {
+const ChatTextInput = ({ websocket, chatId }) => {
   const classes = useStyles();
   const [input, setInput] = React.useState("");
+  const userId = useSelector(selectUserId);
+
   const handleChange = event => {
     setInput(event.target.value);
   };
-  console.log(websocket);
+
   const handleSubmit = event => {
-    const text = {
-      id: "c2d80cae-2e12-4a8c-a7ae-47b74c0a16d7",
-      chatId: "d1aab523-7e90-4bf0-b24a-0b3ce208280e",
+    const payload = {
+      userId: userId,
       text: input
     };
+
     setInput("");
 
     websocket.publish({
-      destination: "/app/chats/message",
-      body: JSON.stringify(text)
+      destination: `/ws/app/chats/${chatId}/message`,
+      body: JSON.stringify(payload)
     });
   };
 
@@ -76,6 +80,7 @@ const ChatTextInput = ({ websocket }) => {
           rowsMax="3"
           onSubmit={handleSubmit}
           onKeyDown={handleKeyDown}
+          disabled={websocket === undefined}
         />
         <SendButton className={classes.sendButton} onClick={handleSubmit} />
       </form>

@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1),
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    marginBottom: theme.spacing(0.5),
+    marginBottom: ".2rem",
     background: theme.palette.background.default,
     zIndex: -1
   },
@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Message = ({ text, isAuthor, removeAuthorText }) => {
+const Message = ({ text, isAuthor, author }) => {
   const classes = useStyles();
 
   const renderAuthor = () => {
@@ -40,14 +40,14 @@ const Message = ({ text, isAuthor, removeAuthorText }) => {
         variant="subtitle1"
         color="textSecondary"
       >
-        Davvo
+        {author}
       </Typography>
     );
   };
 
   return (
     <div className={`${classes.message} ${isAuthor && classes.messageSelfDiv}`}>
-      {!removeAuthorText && renderAuthor()}
+      {author && renderAuthor()}
       <Paper
         variant="elevation"
         elevation={1}

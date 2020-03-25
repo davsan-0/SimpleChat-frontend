@@ -7,12 +7,12 @@ import { useSelector } from "react-redux";
 import Header from "../../common/Header";
 import GoogleLoginComponent from "./GoogleLoginComponent";
 import { selectIsLoggedIn } from "./loginSlice";
+import GoogleLogin from "react-google-login";
 
 const useStyles = makeStyles(theme => ({
   loginPage: {
     height: "100vh"
   },
-  loginButton: { backgroundColor: theme.palette.primary },
   loginWindow: {
     height: "60%",
     display: "flex",
@@ -39,7 +39,7 @@ const LoginPage = () => {
       <div className={classes.loginWindow}>
         <img className={classes.logo} src="SC.png" alt="logo" />
         <Paper elevation={4}>
-          <GoogleLoginComponent className={classes.loginButton} />
+          <GoogleLoginComponent />
         </Paper>
       </div>
     </div>

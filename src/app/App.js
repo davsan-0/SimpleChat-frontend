@@ -7,12 +7,15 @@ import {
   responsiveFontSizes
 } from "@material-ui/core/styles";
 import { green, teal, red } from "@material-ui/core/colors";
-import { Route } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import ChatListPage from "../pages/ChatListPage/ChatListPage";
 import ChatPage from "../pages/ChatPage/ChatPage";
 import LoginPage from "../pages/LoginPage/LoginPage";
 import startWebsocket from "../api/websocket";
+import { selectIsLoggedIn } from "../pages/LoginPage/loginSlice";
+import { selectChats } from "../pages/ChatListPage/chatsSlice";
 
 let theme = createMuiTheme({
   palette: {
@@ -28,11 +31,15 @@ theme = responsiveFontSizes(theme);
 
 const App = props => {
   const [websocket, setWebsocket] = useState();
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const chats = useSelector(selectChats);
 
   useEffect(() => {
-    const client = startWebsocket();
-    setWebsocket(client);
-  }, []);
+    if (isLoggedIn) {
+      const client = startWebsocket(chats);
+      setWebsocket(client);
+    }
+  }, [isLoggedIn]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -48,6 +55,7 @@ const App = props => {
         render={props => <ChatPage {...props} websocket={websocket} />}
       />
       <Route path="/login" exact component={LoginPage} />
+      {!isLoggedIn && <Redirect to="/login" />}
     </ThemeProvider>
   );
 };
