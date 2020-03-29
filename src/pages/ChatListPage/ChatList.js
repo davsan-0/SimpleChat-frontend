@@ -50,6 +50,7 @@ const ChatList = props => {
             chatName={name}
             latestMessage={el.latestMessage}
             to={`/chat/${el.id}`}
+            hasUnread={el.hasUnread}
           />
           {i < chatList.length - 1 && <Divider variant="middle" />}
         </div>

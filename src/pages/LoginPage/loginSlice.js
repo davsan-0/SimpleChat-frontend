@@ -34,7 +34,7 @@ export const loginSlice = createSlice({
 export const { login, logout } = loginSlice.actions;
 
 export const selectIsLoggedIn = state => state.user.value.isLoggedIn;
-//export const selectChats = state => state.user.value.chats;
 export const selectUserId = state => state.user.value.id;
+export const selectUserName = state => state.user.value.name;
 
 export default loginSlice.reducer;

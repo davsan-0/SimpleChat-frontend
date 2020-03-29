@@ -1,9 +1,11 @@
 import { Client, Message } from "@stomp/stompjs";
 import { useSelector } from "react-redux";
 
+import { addChatMessage } from "../pages/ChatListPage/chatsSlice";
+
 // TODO: Get all chat ids from redux store and subscribe
 
-export default function startWebsocket(chats) {
+export default function startWebsocket(dispatch, chats) {
   const client = new Client({
     brokerURL: "ws://localhost:8080/ws/chat",
     debug: function(str) {
@@ -24,13 +26,8 @@ export default function startWebsocket(chats) {
 
     ids.forEach(id => {
       client.subscribe(`/ws/topic/chats/${id}`, function(message) {
-        console.log("Message!!");
-        console.log(message.body);
+        dispatch(addChatMessage(JSON.parse(message.body)));
       });
-      /*client.publish({
-        destination: `/ws/app/chats/${id}/message`,
-        body: "Test"
-      });*/
     });
   };
 

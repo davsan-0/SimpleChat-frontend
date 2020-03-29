@@ -8,42 +8,48 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import parseDate from "../../utils/parseDate";
 import { Link } from "react-router-dom";
+import { findByLabelText } from "@testing-library/react";
 
 const useStyles = makeStyles({
   chatListItem: {
     minWidth: 275
-    //margin: "1rem 0"
   },
   title: {
     fontSize: 14
   },
-  pos: {
-    display: "inline-block",
+  msgtext: {
+    flex: "1 1 auto",
     marginBottom: ".8rem",
-    marginTop: ".3rem"
+    marginTop: ".3rem",
+    textOverflow: "ellipsis",
+    overflow: "hidden",
+    whiteSpace: "nowrap"
   },
   timestamp: {
+    flex: "0 0 auto",
     fontStyle: "italic",
     display: "inline-block",
-    position: "absolute",
-    right: 0,
-    marginRight: "2rem",
-    marginBottom: "1rem",
-    marginTop: ".3rem"
+    padding: ".3rem 1rem 1rem 1rem"
+  },
+  latestMessage: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between"
   }
 });
 
-const ChatListItem = ({ to, chatName, latestMessage }) => {
+const ChatListItem = ({ to, chatName, latestMessage, hasUnread }) => {
   const classes = useStyles();
 
   const renderMessage = () => {
     if (latestMessage) {
       return (
-        <>
+        <div className={classes.latestMessage}>
           <Typography
-            className={classes.pos}
+            className={classes.msgtext}
             variant="subtitle1"
             color="textSecondary"
+            style={hasUnread && { fontWeight: "bold" }}
           >
             {`${latestMessage.author.name}: ${latestMessage.text}`}
           </Typography>
@@ -51,10 +57,11 @@ const ChatListItem = ({ to, chatName, latestMessage }) => {
             className={classes.timestamp}
             variant="subtitle1"
             color="textSecondary"
+            style={hasUnread && { fontWeight: "bold" }}
           >
             {parseDate(latestMessage.createdAt)}
           </Typography>
-        </>
+        </div>
       );
     }
   };

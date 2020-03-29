@@ -87,7 +87,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Header = ({ title, backButton }) => {
+const Header = ({ title, backButton, onBackClick }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
@@ -174,32 +174,12 @@ const Header = ({ title, backButton }) => {
     <div classes={classes.test}>
       <AppBar position="static">
         <Toolbar className={classes.toolbar}>
-          {backButton && <BackButton onClick={history.goBack} />}
-          {/*<IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="open drawer"
-          >
-            <MenuIcon />
-          </IconButton>*/}
+          {backButton && <BackButton onClick={onBackClick || history.goBack} />}
           <Typography className={classes.title} variant="h6" noWrap>
             {title}
           </Typography>
-          {/*<div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-            />
-            </div>*/}
           <div className={classes.grow} />
+          {/*
           <div className={classes.sectionDesktop}>
             <IconButton aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={4} color="secondary">
@@ -222,6 +202,7 @@ const Header = ({ title, backButton }) => {
               <AccountCircle />
             </IconButton>
           </div>
+          */}
           <div className={classes.sectionMobile}>
             <IconButton
               aria-label="show more"
@@ -235,8 +216,8 @@ const Header = ({ title, backButton }) => {
           </div>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
+      {/*renderMobileMenu*/}
+      {/*renderMenu*/}
     </div>
   );
 };

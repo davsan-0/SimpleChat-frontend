@@ -20,20 +20,42 @@ export const chatsSlice = createSlice({
       state.value = _.keyBy(chatArr, chat => chat.id); // Transform Array into Map with id as key
     },
     setChatMessages: (state, action) => {
+      if (action.payload.length === 0) return;
+
       const { chatId } = action.payload[0];
       if (state.value[chatId]) {
         state.value[chatId].messages = action.payload;
       }
     },
     addChatMessage: (state, action) => {
-      // TODO
+      const { chatId } = action.payload;
+      if (state.value[chatId] && state.value[chatId].messages) {
+        state.value[chatId].messages.push(action.payload);
+      } else {
+        state.value[chatId].messages = [action.payload];
+      }
+      state.value[chatId].hasUnread = true;
+    },
+    setHasRead: (state, action) => {
+      const chatId = action.payload;
+      state.value[chatId].hasUnread = false;
     }
   }
 });
 
-export const { setChats, setChatMessages } = chatsSlice.actions;
+export const {
+  setChats,
+  setChatMessages,
+  addChatMessage,
+  setHasRead
+} = chatsSlice.actions;
 
 export const selectChats = state => state.chats.value;
-export const selectMessages = id => state => state.chats.value[id].messages;
+export const selectMessages = id => state =>
+  state.chats.value[id] && state.chats.value[id].messages;
+export const selectHasUnread = id => state =>
+  state.chats.value[id] &&
+  state.chats.value[id].messages &&
+  state.chats.value[id].messages.hasUnread;
 
 export default chatsSlice.reducer;

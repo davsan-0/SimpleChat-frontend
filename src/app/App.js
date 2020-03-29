@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core/styles";
 import { green, teal, red } from "@material-ui/core/colors";
 import { Route, Redirect } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import ChatListPage from "../pages/ChatListPage/ChatListPage";
 import ChatPage from "../pages/ChatPage/ChatPage";
@@ -33,28 +33,24 @@ const App = props => {
   const [websocket, setWebsocket] = useState();
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const chats = useSelector(selectChats);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (isLoggedIn) {
-      const client = startWebsocket(chats);
+      const client = startWebsocket(dispatch, chats);
       setWebsocket(client);
     }
   }, [isLoggedIn]);
 
   return (
     <ThemeProvider theme={theme}>
-      <Route
-        test="Hej"
-        path="/"
-        exact
-        //render={props => <ChatListPage {...props} websocket={websocket} />}
-        component={ChatListPage}
-      />
+      <Route test="Hej" path="/" exact component={ChatListPage} />
       <Route
         path="/chat/:id"
         render={props => <ChatPage {...props} websocket={websocket} />}
       />
       <Route path="/login" exact component={LoginPage} />
+
       {!isLoggedIn && <Redirect to="/login" />}
     </ThemeProvider>
   );

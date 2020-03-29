@@ -5,7 +5,12 @@ import { useSelector, useDispatch } from "react-redux";
 import Message from "./Message";
 import { getChatMessages } from "../../api/api";
 import { selectUserId } from "../LoginPage/loginSlice";
-import { setChatMessages, selectMessages } from "../ChatListPage/chatsSlice";
+import {
+  setChatMessages,
+  selectMessages,
+  selectHasUnread,
+  setHasRead
+} from "../ChatListPage/chatsSlice";
 
 const useStyles = makeStyles(theme => ({
   chatWindow: {
@@ -14,7 +19,8 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
-    paddingBottom: theme.spacing(1)
+    paddingBottom: theme.spacing(1),
+    paddingTop: theme.spacing(1)
   }
 }));
 
@@ -23,6 +29,7 @@ const ChatWindow = ({ id }) => {
   const scrollRef = useRef();
   const userId = useSelector(selectUserId);
   const messages = useSelector(selectMessages(id));
+  const hasUnread = useSelector(selectHasUnread);
   const dispatch = useDispatch();
 
   const renderMessages = msgs => {
@@ -59,6 +66,10 @@ const ChatWindow = ({ id }) => {
   useEffect(() => {
     scrollRef.current.scrollTop = scrollRef.current.scrollHeight; // Sets the scroll bar to bottom of container
   }, [messages]);
+
+  /*useEffect(() => {
+    dispatch(setHasRead(id));
+  }, [hasUnread === true]);*/
 
   return (
     <div className={classes.chatWindow} ref={scrollRef}>

@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useSelector } from "react-redux";
 
 import SendButton from "../../common/buttons/SendButton";
-import { selectUserId } from "../LoginPage/loginSlice";
+import { selectUserId, selectUserName } from "../LoginPage/loginSlice";
 
 const useStyles = makeStyles(theme => ({
   chatTextInput: {
@@ -34,6 +34,7 @@ const ChatTextInput = ({ websocket, chatId }) => {
   const classes = useStyles();
   const [input, setInput] = React.useState("");
   const userId = useSelector(selectUserId);
+  const userName = useSelector(selectUserName);
 
   const handleChange = event => {
     setInput(event.target.value);
@@ -42,6 +43,7 @@ const ChatTextInput = ({ websocket, chatId }) => {
   const handleSubmit = event => {
     const payload = {
       userId: userId,
+      name: userName,
       text: input
     };
 
