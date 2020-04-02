@@ -4,7 +4,7 @@ import GoogleLogin from "react-google-login";
 import { useDispatch } from "react-redux";
 import { login } from "./loginSlice";
 import { setChats } from "../ChatListPage/chatsSlice";
-import { getAccessToken, getMe, getMyChats } from "../../api/api";
+import { getAccessToken, getMe, getMyChats } from "../../api/rest";
 
 const GoogleLoginComponent = () => {
   const dispatch = useDispatch();

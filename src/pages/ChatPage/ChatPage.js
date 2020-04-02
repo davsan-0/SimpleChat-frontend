@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import Header from "../../common/Header";
-import { getChatWithId } from "../../api/api";
+import { getChatWithId } from "../../api/rest";
 import ChatTextInput from "./ChatTextInput";
 import ChatWindow from "./ChatWindow";
 import { selectChats } from "../ChatListPage/chatsSlice";

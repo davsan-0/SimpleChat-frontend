@@ -6,7 +6,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 
-import { getAllUsers, createNewChat } from "../../api/api";
+import { getAllUsers, createNewChat } from "../../api/rest";
 
 const useStyles = makeStyles(theme => ({
   createForm: {

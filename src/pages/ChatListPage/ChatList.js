@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useSelector } from "react-redux";
 
 import ChatListItem from "./ChatListItem";
-import { getAllChatsWithUserId } from "../../api/api";
+import { getAllChatsWithUserId } from "../../api/rest";
 import { selectChats } from "./chatsSlice";
 
 const useStyles = makeStyles({
@@ -34,6 +34,15 @@ const ChatList = props => {
 
   const renderChats = () => {
     let chatList = Object.values(chats);
+    console.log(chatList);
+    chatList.sort((a, b) => {
+      const m1 = b.latestMessage && new Date(b.latestMessage.createdAt);
+      const m2 = a.latestMessage && new Date(a.latestMessage.createdAt);
+      if (!m1) return -1;
+      if (!m2) return 1;
+      return m1 - m2;
+    });
+
     chatList = chatList.map((el, i) => {
       const name =
         el.name === undefined

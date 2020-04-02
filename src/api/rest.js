@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
 
 const api = axios.create({
   baseURL: "http://localhost:8080"

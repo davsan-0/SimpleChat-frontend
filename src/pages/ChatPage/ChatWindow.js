@@ -3,7 +3,7 @@ import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
 import { useSelector, useDispatch } from "react-redux";
 
 import Message from "./Message";
-import { getChatMessages } from "../../api/api";
+import { getChatMessages } from "../../api/rest";
 import { selectUserId } from "../LoginPage/loginSlice";
 import {
   setChatMessages,
