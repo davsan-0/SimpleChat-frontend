@@ -2,21 +2,23 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import GoogleLogin from "react-google-login";
 import { useDispatch } from "react-redux";
-import { login } from "./loginSlice";
+import { fetching, login } from "./loginSlice";
 import { setChats } from "../ChatListPage/chatsSlice";
 import { getAccessToken, getMe, getMyChats } from "../../api/rest";
 
 const GoogleLoginComponent = () => {
   const dispatch = useDispatch();
 
-  const responseGoogle = response => {
+  const responseGoogle = (response) => {
     console.log(response);
   };
 
-  const loginSuccess = response => {
+  const loginSuccess = (response) => {
+    dispatch(fetching());
+
     const token = response.tokenId;
 
-    getAccessToken(token, "google").then(response => {
+    getAccessToken(token, "google").then((response) => {
       const jwt = response.data.access_token;
       const tokenType = response.data.token_type;
 
@@ -24,8 +26,8 @@ const GoogleLoginComponent = () => {
 
       if (accessToken) {
         localStorage.setItem("access_token", accessToken);
-        getMe().then(res1 => {
-          getMyChats().then(res2 => {
+        getMe().then((res1) => {
+          getMyChats().then((res2) => {
             dispatch(setChats(res2.data));
             dispatch(login(res1.data));
           });

@@ -32,29 +32,28 @@ const ChatWindow = ({ id }) => {
   const hasUnread = useSelector(selectHasUnread);
   const dispatch = useDispatch();
 
-  const renderMessages = msgs => {
+  const renderMessages = messageArray => {
     let prevAuthor = null;
     let hasNewAuthor;
-    const data = msgs.map(el => {
-      if (el.author.name === prevAuthor) {
+
+    return messageArray.map(message => {
+      if (message.author.name === prevAuthor) {
         hasNewAuthor = false;
       } else {
-        prevAuthor = el.author.name;
+        prevAuthor = message.author.name;
         hasNewAuthor = true;
       }
-      const isAuthor = el.author.id === userId;
+      const isAuthor = message.author.id === userId;
 
       return (
         <Message
-          key={el.id}
+          key={message.id}
           author={!isAuthor && hasNewAuthor && prevAuthor}
-          text={el.text}
+          text={message.text}
           isAuthor={isAuthor}
         />
       );
     });
-
-    return data;
   };
 
   useEffect(() => {

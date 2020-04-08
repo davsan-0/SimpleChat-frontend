@@ -6,9 +6,9 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 
-import { getAllUsers, createNewChat } from "../../api/rest";
+import { getAllUsers, createNewChat } from "../../../api/rest";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   createForm: {
     display: "flex",
     flexWrap: "wrap",
@@ -19,19 +19,19 @@ const useStyles = makeStyles(theme => ({
     position: "absolute",
     height: "100%",
     width: "100%",
-    backgroundColor: "white"
+    backgroundColor: "white",
     //marginTop: theme.spacing(1)
   },
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: "10rem"
-  }
+    width: "10rem",
+  },
 }));
 
 // For dev purposes
 function sleep(delay = 0) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(resolve, delay);
   });
 }
@@ -45,7 +45,7 @@ const CreateChatForm = React.forwardRef((props, ref) => {
   const [usersArr, setUsersArr] = useState([]);
   const [loading, setLoading] = useState(false); //open && options.length === 0;
 
-  const handleNameInputChange = event => {
+  const handleNameInputChange = (event) => {
     setNameInput(event.target.value);
   };
 
@@ -60,8 +60,10 @@ const CreateChatForm = React.forwardRef((props, ref) => {
   const handleSubmit = () => {
     createNewChat(
       nameInput,
-      usersArr.map(user => user.id)
-    );
+      usersArr.map((user) => user.id)
+    ).then(() => {
+      props.onCreate();
+    });
   };
 
   useEffect(() => {
@@ -71,7 +73,7 @@ const CreateChatForm = React.forwardRef((props, ref) => {
       setLoading(true);
 
       (async () => {
-        getAllUsers(search).then(response => {
+        getAllUsers(search).then((response) => {
           if (active) {
             setOptions(response.data);
             setLoading(false);
@@ -110,10 +112,10 @@ const CreateChatForm = React.forwardRef((props, ref) => {
         onChange={handleNameInputChange}
         InputLabelProps={{
           shrink: true,
-          style: { fontSize: "1.5rem" }
+          style: { fontSize: "1.5rem" },
         }}
         InputProps={{
-          style: { fontSize: "1.5rem" }
+          style: { fontSize: "1.5rem" },
         }}
         variant="standard"
       />
@@ -129,7 +131,7 @@ const CreateChatForm = React.forwardRef((props, ref) => {
           setOpen(false);
         }}
         style={{ marginBottom: "5rem", width: "80%" }}
-        getOptionLabel={option => option.name}
+        getOptionLabel={(option) => option.name}
         options={options}
         loading={loading}
         noOptionsText="No users found"
@@ -137,7 +139,7 @@ const CreateChatForm = React.forwardRef((props, ref) => {
         onChange={handleParticipantsChange}
         selectOnFocus
         filterSelectedOptions
-        renderInput={params => (
+        renderInput={(params) => (
           <TextField
             {...params}
             label="Participants"
@@ -146,7 +148,7 @@ const CreateChatForm = React.forwardRef((props, ref) => {
             value={search}
             InputLabelProps={{
               shrink: true,
-              style: { fontSize: "1.5rem" }
+              style: { fontSize: "1.5rem" },
             }}
             InputProps={{
               ...params.InputProps,
@@ -158,7 +160,7 @@ const CreateChatForm = React.forwardRef((props, ref) => {
                     <CircularProgress color="inherit" size={20} />
                   ) : null}
                 </>
-              )
+              ),
             }}
           />
         )}

@@ -6,29 +6,33 @@ import { useHistory } from "react-router-dom";
 
 import Header from "../../common/Header";
 import ChatList from "./ChatList";
-import CreateChatPopup from "../CreateChatPopup/CreateChatPopup";
+import CreateChatPopup from "./CreateChat/CreateChatPopup";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-start",
-    overflow: "hidden"
+    overflow: "hidden",
   },
   fabButton: {
     position: "absolute",
     bottom: theme.spacing(4),
-    right: theme.spacing(4)
-  }
+    right: theme.spacing(4),
+  },
 }));
 
-const ChatListPage = props => {
+const ChatListPage = (props) => {
   const classes = useStyles();
   const history = useHistory();
   const [addMenu, setAddMenu] = useState(false);
 
-  const handleClick = event => {
+  const openMenu = (event) => {
     setAddMenu(true);
+  };
+
+  const closeMenu = (event) => {
+    setAddMenu(false);
   };
 
   return (
@@ -44,11 +48,11 @@ const ChatListPage = props => {
           color="secondary"
           aria-label="add"
           className={classes.fabButton}
-          onClick={handleClick}
+          onClick={openMenu}
         >
           <AddIcon />
         </Fab>
-        <CreateChatPopup in={addMenu} />
+        <CreateChatPopup in={addMenu} onCreate={closeMenu} />
       </div>
     </>
   );

@@ -4,9 +4,9 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import CreateChatForm from "./CreateChatForm";
 
-const useStyles = makeStyles(theme => ({
+/*const useStyles = makeStyles((theme) => ({
   root: {
-    height: 180
+    height: 180,
   },
   top: {
     zIndex: 1,
@@ -14,22 +14,22 @@ const useStyles = makeStyles(theme => ({
     height: "100vh",
     width: "100vw",
     backgroundColor: "white",
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   paper: {
     position: "relative",
     backgroundColor: "white",
     height: "100%",
-    width: "100%"
-  }
-}));
+    width: "100%",
+  },
+}));*/
 
-const CreateChatPopup = props => {
-  const classes = useStyles();
+const CreateChatPopup = (props) => {
+  //const classes = useStyles();
 
   return (
     <Slide direction="up" in={props.in} mountOnEnter unmountOnExit>
-      <CreateChatForm />
+      <CreateChatForm onCreate={props.onCreate} />
     </Slide>
   );
 };

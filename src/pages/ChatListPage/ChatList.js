@@ -11,30 +11,29 @@ const useStyles = makeStyles({
   root: {
     display: "flex",
     flexDirection: "column",
-    overflow: "auto"
+    overflow: "auto",
   },
   noChatText: {
     color: "rgba(200, 200, 200, 1)",
     fontSize: "1.5rem",
     textAlign: "center",
     marginTop: "2rem",
-    fontStyle: "italic"
+    fontStyle: "italic",
   },
   chatLink: {
     textDecoration: "none",
     "&:focus, &:hover, &:visited, &:link, &:active": {
-      textDecoration: "none"
-    }
-  }
+      textDecoration: "none",
+    },
+  },
 });
 
-const ChatList = props => {
+const ChatList = (props) => {
   const classes = useStyles();
   const chats = useSelector(selectChats);
 
   const renderChats = () => {
     let chatList = Object.values(chats);
-    console.log(chatList);
     chatList.sort((a, b) => {
       const m1 = b.latestMessage && new Date(b.latestMessage.createdAt);
       const m2 = a.latestMessage && new Date(a.latestMessage.createdAt);
@@ -59,7 +58,6 @@ const ChatList = props => {
             chatName={name}
             latestMessage={el.latestMessage}
             to={`/chat/${el.id}`}
-            hasUnread={el.hasUnread}
           />
           {i < chatList.length - 1 && <Divider variant="middle" />}
         </div>

@@ -6,42 +6,55 @@ import { useSelector } from "react-redux";
 
 import Header from "../../common/Header";
 import GoogleLoginComponent from "./GoogleLoginComponent";
-import { selectIsLoggedIn } from "./loginSlice";
-import GoogleLogin from "react-google-login";
+import { selectIsLoggedIn, selectFetching } from "./loginSlice";
+import CenteredSpinner from "../../common/CenteredSpinner";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   loginPage: {
-    height: "100vh"
+    height: "100vh",
   },
   loginWindow: {
     height: "60%",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   logo: {
     maxWidth: "60%",
     width: "auto",
-    height: "auto"
-  }
+    height: "auto",
+  },
+  center: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+  },
 }));
 
 const LoginPage = () => {
   const classes = useStyles();
   const isLoggedIn = useSelector(selectIsLoggedIn);
+  const isFetching = useSelector(selectFetching);
 
   if (isLoggedIn) return <Redirect to="/" />;
 
-  return (
-    <div className={classes.loginPage}>
-      <Header />
+  const renderLoginPage = () => {
+    return (
       <div className={classes.loginWindow}>
         <img className={classes.logo} src="SC.png" alt="logo" />
         <Paper elevation={4}>
           <GoogleLoginComponent />
         </Paper>
       </div>
+    );
+  };
+
+  return (
+    <div className={classes.loginPage}>
+      <Header />
+      {(isFetching && <CenteredSpinner />) || renderLoginPage()}
     </div>
   );
 };
