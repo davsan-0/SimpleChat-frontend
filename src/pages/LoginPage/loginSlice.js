@@ -9,11 +9,18 @@ export const loginSlice = createSlice({
       name: "",
       isLoggedIn: false,
       fetching: false,
+      error: false,
+      errorMessage: "",
     },
   },
   reducers: {
     fetching: (state) => {
-      state.value = { ...state.value, fetching: true };
+      state.value.fetching = true;
+    },
+    error: (state, action) => {
+      state.value.fetching = false;
+      state.value.error = true;
+      state.value.errorMessage = action.payload;
     },
     login: (state, action) => {
       const { id, imageUrl, name } = action.payload;
@@ -42,7 +49,7 @@ export const loginSlice = createSlice({
   },
 });
 
-export const { fetching, login, logout } = loginSlice.actions;
+export const { fetching, error, login, logout } = loginSlice.actions;
 
 export const selectIsLoggedIn = (state) => state.user.value.isLoggedIn;
 export const selectUserId = (state) => state.user.value.id;

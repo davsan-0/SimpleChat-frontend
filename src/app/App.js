@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import {
   ThemeProvider,
   createMuiTheme,
-  responsiveFontSizes
+  responsiveFontSizes,
 } from "@material-ui/core/styles";
 import { green, teal, red } from "@material-ui/core/colors";
 import { Route, Redirect } from "react-router-dom";
@@ -19,16 +19,16 @@ import { selectChats } from "../pages/ChatListPage/chatsSlice";
 let theme = createMuiTheme({
   palette: {
     primary: teal,
-    secondary: red
+    secondary: red,
   },
   typography: {
-    htmlFontSize: 10
-  }
+    htmlFontSize: 10,
+  },
 });
 
 theme = responsiveFontSizes(theme);
 
-const App = props => {
+const App = (props) => {
   const [websocket, setWebsocket] = useState();
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const chats = useSelector(selectChats);
@@ -46,7 +46,7 @@ const App = props => {
       <Route test="Hej" path="/" exact component={ChatListPage} />
       <Route
         path="/chat/:id"
-        render={props => <ChatPage {...props} websocket={websocket} />}
+        render={(props) => <ChatPage {...props} websocket={websocket} />}
       />
       <Route path="/login" exact component={LoginPage} />
 

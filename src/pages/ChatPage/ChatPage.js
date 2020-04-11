@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import Header from "../../common/Header";
 import { getChatWithId } from "../../api/rest";
 import ChatTextInput from "./ChatTextInput";
 import ChatWindow from "./ChatWindow";
-import { selectChats } from "../ChatListPage/chatsSlice";
+import {
+  selectChats,
+  setFocused,
+  setUnfocused,
+} from "../ChatListPage/chatsSlice";
 
 const useStyles = makeStyles({
   chatPage: {
@@ -15,14 +19,23 @@ const useStyles = makeStyles({
     flexDirection: "column",
     overflow: "hidden",
     flexWrap: "nowrap",
-    height: "100vh"
-  }
+    height: "100vh",
+  },
 });
 
 const ChatPage = ({ websocket }) => {
   const classes = useStyles();
   const { id } = useParams();
   const chat = useSelector(selectChats)[id];
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setFocused(id));
+
+    return () => {
+      dispatch(setUnfocused(id));
+    };
+  }, []);
 
   return (
     <div className={classes.chatPage}>

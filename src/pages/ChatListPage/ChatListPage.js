@@ -22,9 +22,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ChatListPage = (props) => {
+const ChatListPage = () => {
   const classes = useStyles();
-  const history = useHistory();
   const [addMenu, setAddMenu] = useState(false);
 
   const openMenu = (event) => {

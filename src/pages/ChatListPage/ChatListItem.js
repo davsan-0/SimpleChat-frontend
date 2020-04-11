@@ -4,66 +4,97 @@ import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardActionArea from "@material-ui/core/CardActionArea";
-import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import parseDate from "../../utils/parseDate";
 import { Link } from "react-router-dom";
 import { findByLabelText } from "@testing-library/react";
+import PropTypes from "prop-types";
+import Avatar from "@material-ui/core/Avatar";
+import AvatarGroup from "@material-ui/lab/AvatarGroup";
+import { useSelector } from "react-redux";
 
-const useStyles = makeStyles({
-  chatListItem: {
-    minWidth: 275
+import UnreadBadge from "./UnreadBadge";
+import { selectUserId } from "../LoginPage/loginSlice";
+
+const useStyles = makeStyles((theme) => ({
+  textWrap: {
+    position: "relative",
+    paddingBottom: theme.spacing(1),
   },
   title: {
-    fontSize: 14
+    fontSize: 14,
   },
   msgtext: {
     flex: "1 1 auto",
-    marginBottom: ".8rem",
+    marginBottom: "1rem",
     marginTop: ".3rem",
     textOverflow: "ellipsis",
     overflow: "hidden",
-    whiteSpace: "nowrap"
+    whiteSpace: "nowrap",
   },
   timestamp: {
-    flex: "0 0 auto",
+    position: "absolute",
+    bottom: 0,
+    right: 0,
     fontStyle: "italic",
     display: "inline-block",
-    padding: ".3rem 1rem 1rem 1rem"
   },
   latestMessage: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-between"
-  }
-});
+    justifyContent: "space-between",
+  },
+  avatarGroup: {
+    marginLeft: theme.spacing(1),
+  },
+  bold: {
+    fontWeight: "bold",
+  },
+}));
 
-const ChatListItem = ({ to, chatName, latestMessage, hasUnread }) => {
+const ChatListItem = ({
+  to,
+  chatName,
+  latestMessage,
+  hasUnread,
+  unreadAmount,
+  participants,
+}) => {
   const classes = useStyles();
+  const userId = useSelector(selectUserId);
 
   const renderMessage = () => {
     if (latestMessage) {
       return (
-        <div className={classes.latestMessage}>
+        <div className={classes.textWrap}>
+          <div className={classes.latestMessage}>
+            <Typography
+              className={`${classes.msgtext} ${hasUnread && classes.bold}`}
+              variant="subtitle1"
+              color="textSecondary"
+            >
+              {hasUnread && <UnreadBadge count={unreadAmount} />}
+              {`${latestMessage.author.name}: ${latestMessage.text}`}
+            </Typography>
+          </div>
           <Typography
-            className={classes.msgtext}
+            className={`${classes.timestamp} ${
+              (hasUnread && classes.bold) || ""
+            }`}
             variant="subtitle1"
             color="textSecondary"
-            style={hasUnread && { fontWeight: "bold" }}
-          >
-            {`${latestMessage.author.name}: ${latestMessage.text}`}
-          </Typography>
-          <Typography
-            className={classes.timestamp}
-            variant="subtitle1"
-            color="textSecondary"
-            style={hasUnread && { fontWeight: "bold" }}
           >
             {parseDate(latestMessage.createdAt)}
           </Typography>
         </div>
       );
     }
+  };
+
+  const renderAvatars = () => {
+    const others = participants.filter((user) => user.id !== userId);
+
+    return others.map((el) => <Avatar alt={el.name} src={el.imageUrl} />);
   };
 
   return (
@@ -74,10 +105,22 @@ const ChatListItem = ({ to, chatName, latestMessage, hasUnread }) => {
             {chatName}
           </Typography>
           {renderMessage()}
+          <AvatarGroup max={5} className={classes.avatarGroup}>
+            {renderAvatars()}
+          </AvatarGroup>
         </CardContent>
       </CardActionArea>
     </div>
   );
+};
+
+ChatListItem.propTypes = {
+  chatName: PropTypes.string.isRequired,
+  to: PropTypes.string.isRequired,
+  latestMessage: PropTypes.object.isRequired,
+  hasUnread: PropTypes.bool.isRequired,
+  unreadAmount: PropTypes.number.isRequired,
+  participants: PropTypes.array.isRequired,
 };
 
 export default ChatListItem;

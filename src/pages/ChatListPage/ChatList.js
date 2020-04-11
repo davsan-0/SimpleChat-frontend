@@ -28,7 +28,7 @@ const useStyles = makeStyles({
   },
 });
 
-const ChatList = (props) => {
+const ChatList = () => {
   const classes = useStyles();
   const chats = useSelector(selectChats);
 
@@ -58,6 +58,9 @@ const ChatList = (props) => {
             chatName={name}
             latestMessage={el.latestMessage}
             to={`/chat/${el.id}`}
+            hasUnread={el.hasUnread}
+            unreadAmount={el.unreadAmount}
+            participants={el.participants}
           />
           {i < chatList.length - 1 && <Divider variant="middle" />}
         </div>

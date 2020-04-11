@@ -53,7 +53,7 @@ const LoginPage = () => {
 
   return (
     <div className={classes.loginPage}>
-      <Header />
+      <Header title="Login" />
       {(isFetching && <CenteredSpinner />) || renderLoginPage()}
     </div>
   );

@@ -2,9 +2,15 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
+import Avatar from "@material-ui/core/Avatar";
+import PropTypes from "prop-types";
 
-const useStyles = makeStyles(theme => ({
-  message: {},
+const useStyles = makeStyles((theme) => ({
+  flex: {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: ".5rem",
+  },
   messageBody: {
     borderRadius: "2rem",
     display: "inline-block",
@@ -14,23 +20,28 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(1),
     marginBottom: ".2rem",
     background: theme.palette.background.default,
-    zIndex: -1
+    zIndex: -1,
   },
   messageSelfDiv: {
-    alignSelf: "flex-end"
+    alignSelf: "flex-end",
   },
   messageSelf: {
     background: theme.palette.primary.light,
-    color: "white"
+    color: "white",
   },
   author: {
-    marginLeft: theme.spacing(2),
+    marginLeft: theme.spacing(1),
     marginTop: theme.spacing(1),
-    alignText: "bottom"
-  }
+  },
+  avatar: {
+    height: "3rem",
+    width: "3rem",
+    display: "inline-block",
+    marginLeft: ".5rem",
+  },
 }));
 
-const Message = ({ text, isAuthor, author }) => {
+const Message = ({ text, isAuthor, author, imageUrl }) => {
   const classes = useStyles();
 
   const renderAuthor = () => {
@@ -46,17 +57,31 @@ const Message = ({ text, isAuthor, author }) => {
   };
 
   return (
-    <div className={`${classes.message} ${isAuthor && classes.messageSelfDiv}`}>
+    <div className={`${(isAuthor && classes.messageSelfDiv) || ""}`}>
       {author && renderAuthor()}
-      <Paper
-        variant="elevation"
-        elevation={1}
-        className={`${classes.messageBody} ${isAuthor && classes.messageSelf}`}
-      >
-        <Typography variant="body1">{text}</Typography>
-      </Paper>
+      <div className={classes.flex}>
+        {(imageUrl && (
+          <Avatar className={classes.avatar} alt={author} src={imageUrl} />
+        )) || <div className={classes.avatar} />}
+        <Paper
+          variant="elevation"
+          elevation={1}
+          className={`${classes.messageBody} ${
+            isAuthor && classes.messageSelf
+          }`}
+        >
+          <Typography variant="body1">{text}</Typography>
+        </Paper>
+      </div>
     </div>
   );
+};
+
+Message.propTypes = {
+  text: PropTypes.string,
+  isAuthor: PropTypes.bool,
+  author: PropTypes.string,
+  imageUrl: PropTypes.string,
 };
 
 export default Message;
