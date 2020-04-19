@@ -4,19 +4,28 @@ import AddIcon from "@material-ui/icons/Add";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 
-import Header from "../../common/Header";
+import Header from "../../common/Header/Header";
 import ChatList from "./ChatList";
 import CreateChatPopup from "./CreateChat/CreateChatPopup";
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    height: "100%",
+    width: "100%",
+    position: "fixed",
     display: "flex",
+    flexDirection: "column",
+  },
+  chatListPage: {
+    position: "relative",
+    display: "flex",
+    flexGrow: 1,
     flexDirection: "column",
     justifyContent: "flex-start",
     overflow: "hidden",
   },
   fabButton: {
-    position: "absolute",
+    position: "fixed",
     bottom: theme.spacing(4),
     right: theme.spacing(4),
   },
@@ -35,13 +44,13 @@ const ChatListPage = () => {
   };
 
   return (
-    <>
+    <div className={classes.root}>
       <Header
         title={addMenu ? "Create New Chat" : "SimpleChat"}
         backButton={addMenu}
         onBackClick={() => setAddMenu(false)}
       />
-      <div className={classes.root}>
+      <div className={classes.chatListPage}>
         <ChatList />
         <Fab
           color="secondary"
@@ -53,7 +62,7 @@ const ChatListPage = () => {
         </Fab>
         <CreateChatPopup in={addMenu} onCreate={closeMenu} />
       </div>
-    </>
+    </div>
   );
 };
 

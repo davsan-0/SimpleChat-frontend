@@ -12,9 +12,14 @@ import { useSelector, useDispatch } from "react-redux";
 import ChatListPage from "../pages/ChatListPage/ChatListPage";
 import ChatPage from "../pages/ChatPage/ChatPage";
 import LoginPage from "../pages/LoginPage/LoginPage";
-import startWebsocket from "../api/websocket";
-import { selectIsLoggedIn } from "../pages/LoginPage/loginSlice";
+import { startWebsocket, stopWebsocket, getClient } from "../api/websocket";
+import {
+  selectIsLoggedIn,
+  selectFetching,
+  selectUserId,
+} from "../pages/LoginPage/loginSlice";
 import { selectChats } from "../pages/ChatListPage/chatsSlice";
+import CenteredSpinner from "../common/CenteredSpinner";
 
 let theme = createMuiTheme({
   palette: {
@@ -28,29 +33,70 @@ let theme = createMuiTheme({
 
 theme = responsiveFontSizes(theme);
 
+const intervalMap = new Map();
+let runOnce = false;
+
 const App = (props) => {
-  const [websocket, setWebsocket] = useState();
   const isLoggedIn = useSelector(selectIsLoggedIn);
+  const isFetching = useSelector(selectFetching);
   const chats = useSelector(selectChats);
+  const userId = useSelector(selectUserId);
   const dispatch = useDispatch();
 
+  const intervalTime = 10000;
+
   useEffect(() => {
-    if (isLoggedIn) {
-      const client = startWebsocket(dispatch, chats);
-      setWebsocket(client);
+    const wsClient = getClient();
+    if (isLoggedIn && wsClient === null) {
+      console.log("user ", userId);
+      startWebsocket(dispatch, chats);
+    } else {
+      stopWebsocket();
+      console.log("WS Client deactivated");
+    }
+
+    if (!runOnce && isLoggedIn && Object.keys(chats).length > 0) {
+      Object.keys(chats).forEach((chatId) => {
+        const heartbeat = () => {
+          const wsClient = getClient();
+          if (wsClient?.connected) {
+            wsClient.publish({
+              destination: `/ws/app/chats/${chatId}/online`,
+              body: userId,
+            });
+          }
+        };
+
+        heartbeat();
+        const intervalId = setInterval(
+          heartbeat,
+          intervalTime + Math.random() * 1000
+        );
+        intervalMap.set(chatId, intervalId);
+      });
+      runOnce = true;
+    }
+
+    if (!isLoggedIn && intervalMap.length > 0) {
+      intervalMap.forEach((val, key) => {
+        clearInterval(key);
+      });
+      intervalMap.clear();
+      runOnce = false;
     }
   }, [isLoggedIn]);
 
+  const checkStatus = () => {
+    if (isFetching) return <CenteredSpinner />;
+    if (!isLoggedIn) return <Redirect to="/login" />;
+  };
+
   return (
     <ThemeProvider theme={theme}>
-      <Route test="Hej" path="/" exact component={ChatListPage} />
-      <Route
-        path="/chat/:id"
-        render={(props) => <ChatPage {...props} websocket={websocket} />}
-      />
+      <Route path="/" exact component={ChatListPage} />
+      <Route path="/chat/:id" component={ChatPage} />
       <Route path="/login" exact component={LoginPage} />
-
-      {!isLoggedIn && <Redirect to="/login" />}
+      {checkStatus()}
     </ThemeProvider>
   );
 };

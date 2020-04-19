@@ -4,7 +4,7 @@ import Paper from "@material-ui/core/Paper";
 import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import Header from "../../common/Header";
+import Header from "../../common/Header/Header";
 import GoogleLoginComponent from "./GoogleLoginComponent";
 import { selectIsLoggedIn, selectFetching } from "./loginSlice";
 import CenteredSpinner from "../../common/CenteredSpinner";

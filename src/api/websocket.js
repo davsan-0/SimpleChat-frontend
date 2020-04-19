@@ -1,13 +1,21 @@
 import { Client, Message } from "@stomp/stompjs";
 import { useSelector } from "react-redux";
 
-import { addChatMessage } from "../pages/ChatListPage/chatsSlice";
+import {
+  addChatMessage,
+  setReadReceiptForUser,
+  setOnlineStatusForUserInChat,
+} from "../pages/ChatListPage/chatsSlice";
 
-// TODO: Get all chat ids from redux store and subscribe
+let client = null;
 
-export default function startWebsocket(dispatch, chats) {
-  const client = new Client({
-    brokerURL: "ws://localhost:8080/ws/chat",
+export const getClient = () => {
+  return client;
+};
+
+export function startWebsocket(dispatch, chats) {
+  const wsClient = new Client({
+    brokerURL: "ws://192.168.0.8:8080/ws/chat",
     debug: function (str) {
       if (process.env.NODE_ENV === "development") {
         console.log(str);
@@ -18,17 +26,35 @@ export default function startWebsocket(dispatch, chats) {
     heartbeatOutgoing: 4000,
   });
 
-  client.onConnect = function (frame) {
+  wsClient.onConnect = function (frame) {
     const ids = Object.keys(chats);
 
     ids.forEach((id) => {
-      client.subscribe(`/ws/topic/chats/${id}`, function (message) {
+      wsClient.subscribe(`/ws/topic/chats/${id}/message`, (message) => {
         dispatch(addChatMessage(JSON.parse(message.body)));
+      });
+      wsClient.subscribe(`/ws/topic/chats/${id}/readreceipt`, (message) => {
+        const messageObj = JSON.parse(message.body);
+        messageObj.chatId = id;
+        dispatch(setReadReceiptForUser(messageObj));
+      });
+      wsClient.subscribe(`/ws/topic/chats/${id}/online`, (message) => {
+        const payload = JSON.parse(message.body);
+        payload.chatId = id;
+        console.log("payload = ", payload);
+        dispatch(setOnlineStatusForUserInChat(payload));
       });
     });
   };
 
-  client.activate();
+  wsClient.activate();
 
-  return client;
+  client = wsClient;
+}
+
+export function stopWebsocket() {
+  if (client) {
+    client.deactivate();
+    client = null;
+  }
 }

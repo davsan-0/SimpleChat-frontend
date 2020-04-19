@@ -3,29 +3,27 @@ import { createSlice } from "@reduxjs/toolkit";
 export const loginSlice = createSlice({
   name: "user",
   initialState: {
-    value: {
-      id: "",
-      imageUrl: "",
-      name: "",
-      isLoggedIn: false,
-      fetching: false,
-      error: false,
-      errorMessage: "",
-    },
+    id: "",
+    imageUrl: "",
+    name: "",
+    isLoggedIn: false,
+    fetching: false,
+    error: false,
+    errorMessage: "",
   },
   reducers: {
     fetching: (state) => {
-      state.value.fetching = true;
+      state.fetching = true;
     },
     error: (state, action) => {
-      state.value.fetching = false;
-      state.value.error = true;
-      state.value.errorMessage = action.payload;
+      state.fetching = false;
+      state.error = true;
+      state.errorMessage = action.payload;
     },
     login: (state, action) => {
       const { id, imageUrl, name } = action.payload;
-      state.value = {
-        ...state.value,
+      return {
+        ...state,
         id: id,
         imageUrl: imageUrl,
         name: name,
@@ -33,12 +31,8 @@ export const loginSlice = createSlice({
         fetching: false,
       };
     },
-    /*login: state => {
-      state.value.isLoggedIn = true;
-    },*/
-    logout: (state) => {
-      localStorage.removeItem("access_token");
-      state.value = {
+    logout: () => {
+      return {
         id: "",
         imageUrl: "",
         name: "",
@@ -51,9 +45,10 @@ export const loginSlice = createSlice({
 
 export const { fetching, error, login, logout } = loginSlice.actions;
 
-export const selectIsLoggedIn = (state) => state.user.value.isLoggedIn;
-export const selectUserId = (state) => state.user.value.id;
-export const selectUserName = (state) => state.user.value.name;
-export const selectFetching = (state) => state.user.value.fetching;
+export const selectIsLoggedIn = (state) => state.user.isLoggedIn;
+export const selectUserId = (state) => state.user.id;
+export const selectUserName = (state) => state.user.name;
+export const selectUserImageUrl = (state) => state.user.imageUrl;
+export const selectFetching = (state) => state.user.fetching;
 
 export default loginSlice.reducer;

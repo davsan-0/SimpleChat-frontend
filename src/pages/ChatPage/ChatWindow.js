@@ -1,11 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
 import { useSelector, useDispatch } from "react-redux";
+import _ from "lodash";
 
 import Message from "./Message";
 import { getChatMessages } from "../../api/rest";
 import { selectUserId } from "../LoginPage/loginSlice";
-import { setChatMessages, selectMessages } from "../ChatListPage/chatsSlice";
+import {
+  setChatMessages,
+  selectMessages,
+  selectParticipants,
+} from "../ChatListPage/chatsSlice";
 
 const useStyles = makeStyles((theme) => ({
   chatWindow: {
@@ -23,10 +28,12 @@ const ChatWindow = ({ id }) => {
   const classes = useStyles();
   const scrollRef = useRef();
   const userId = useSelector(selectUserId);
+  const participants = useSelector(selectParticipants(id));
   const messages = useSelector(selectMessages(id));
   const dispatch = useDispatch();
 
   const renderMessages = (messageArray) => {
+    const readReceipts = _.groupBy(participants, "lastReadMessage");
     let prevAuthor = null;
     let hasNewAuthor;
 
@@ -47,6 +54,10 @@ const ChatWindow = ({ id }) => {
         showImage = true;
       }
 
+      const readReceiptsArr = readReceipts[message.id]?.filter(
+        (user) => user.id !== userId
+      );
+
       return (
         <Message
           key={message.id}
@@ -58,6 +69,8 @@ const ChatWindow = ({ id }) => {
           }
           text={message.text}
           isAuthor={isAuthor}
+          readReceipts={readReceiptsArr}
+          isOnline={Boolean(message.author.online)}
         />
       );
     });

@@ -15,12 +15,11 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    zIndex: 1,
+    zIndex: 100,
     position: "absolute",
     height: "100%",
     width: "100%",
     backgroundColor: "white",
-    //marginTop: theme.spacing(1)
   },
   textField: {
     marginLeft: theme.spacing(1),
@@ -28,13 +27,6 @@ const useStyles = makeStyles((theme) => ({
     width: "10rem",
   },
 }));
-
-// For dev purposes
-function sleep(delay = 0) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, delay);
-  });
-}
 
 const CreateChatForm = React.forwardRef((props, ref) => {
   const classes = useStyles();

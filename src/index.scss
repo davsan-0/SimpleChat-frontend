@@ -9,7 +9,7 @@
 html {
     // This defines what 1rem is
     font-size: 62.5%;
-
+    height: 100%;
     /*@include respond(tab-port) {
         font-size: 68.75%;
     }
@@ -25,5 +25,6 @@ html {
 
 body {
     box-sizing: border-box;
+    height: 100%;
 }
   

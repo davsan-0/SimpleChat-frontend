@@ -1,7 +1,5 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import Typography from "@material-ui/core/Typography";
@@ -9,12 +7,12 @@ import parseDate from "../../utils/parseDate";
 import { Link } from "react-router-dom";
 import { findByLabelText } from "@testing-library/react";
 import PropTypes from "prop-types";
-import Avatar from "@material-ui/core/Avatar";
-import AvatarGroup from "@material-ui/lab/AvatarGroup";
 import { useSelector } from "react-redux";
 
 import UnreadBadge from "./UnreadBadge";
+import CustomAvatarGroup from "../../common/CustomAvatarGroup";
 import { selectUserId } from "../LoginPage/loginSlice";
+import CustomAvatar from "../../common/CustomAvatar";
 
 const useStyles = makeStyles((theme) => ({
   textWrap: {
@@ -74,7 +72,11 @@ const ChatListItem = ({
               color="textSecondary"
             >
               {hasUnread && <UnreadBadge count={unreadAmount} />}
-              {`${latestMessage.author.name}: ${latestMessage.text}`}
+              {`${
+                latestMessage.author.id === userId
+                  ? "You"
+                  : latestMessage.author.name
+              }: ${latestMessage.text}`}
             </Typography>
           </div>
           <Typography
@@ -94,7 +96,13 @@ const ChatListItem = ({
   const renderAvatars = () => {
     const others = participants.filter((user) => user.id !== userId);
 
-    return others.map((el) => <Avatar alt={el.name} src={el.imageUrl} />);
+    return others.map((el) => (
+      <CustomAvatar
+        isOnline={Boolean(el.online)}
+        alt={el.name}
+        src={el.imageUrl}
+      />
+    ));
   };
 
   return (
@@ -105,9 +113,9 @@ const ChatListItem = ({
             {chatName}
           </Typography>
           {renderMessage()}
-          <AvatarGroup max={5} className={classes.avatarGroup}>
+          <CustomAvatarGroup max={5} className={classes.avatarGroup}>
             {renderAvatars()}
-          </AvatarGroup>
+          </CustomAvatarGroup>
         </CardContent>
       </CardActionArea>
     </div>

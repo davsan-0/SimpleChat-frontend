@@ -10,6 +10,7 @@ import { selectChats } from "./chatsSlice";
 const useStyles = makeStyles({
   root: {
     display: "flex",
+    flexGrow: 1,
     flexDirection: "column",
     overflow: "auto",
   },
@@ -43,11 +44,12 @@ const ChatList = () => {
     });
 
     chatList = chatList.map((el, i) => {
+      const participants = Object.values(el.participants);
       const name =
         el.name === undefined
-          ? el.participants
+          ? participants
               .map((u, j) => {
-                if (j !== el.participants.length - 1) return u.name + ", ";
+                if (j !== participants.length - 1) return u.name + ", ";
                 return u.name;
               })
               .join("")
@@ -60,7 +62,7 @@ const ChatList = () => {
             to={`/chat/${el.id}`}
             hasUnread={el.hasUnread}
             unreadAmount={el.unreadAmount}
-            participants={el.participants}
+            participants={participants}
           />
           {i < chatList.length - 1 && <Divider variant="middle" />}
         </div>

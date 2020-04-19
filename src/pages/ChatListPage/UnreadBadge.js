@@ -4,15 +4,16 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   unreadBadge: {
     display: "inline-block",
-    verticalAlign: "baseline",
     width: "2rem",
     height: "2rem",
     marginRight: ".5rem",
     borderRadius: "2rem",
     backgroundColor: theme.palette.secondary.main,
-    textAlign: "center",
     color: "white",
     fontWeight: "bold",
+    display: "inline-flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
 }));
 

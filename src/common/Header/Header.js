@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -16,21 +17,23 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { useHistory } from "react-router-dom";
 
-import BackButton from "./buttons/BackButton";
+import BackButton from "../buttons/BackButton";
+import ProfileMenu from "./ProfileMenu";
+import { selectIsLoggedIn } from "../../pages/LoginPage/loginSlice";
 
-const useStyles = makeStyles(theme => ({
-  test: {
-    flexShrink: 0
+const useStyles = makeStyles((theme) => ({
+  noshrink: {
+    flexShrink: 0,
   },
   grow: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   menuButton: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
   },
   title: {
     display: "block",
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(1),
     /*[theme.breakpoints.up('sm')]: {
       display: 'block',
     },*/
@@ -40,15 +43,15 @@ const useStyles = makeStyles(theme => ({
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
     "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25)
+      backgroundColor: fade(theme.palette.common.white, 0.25),
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
     width: "100%",
     [theme.breakpoints.up("sm")]: {
       marginLeft: theme.spacing(3),
-      width: "auto"
-    }
+      width: "auto",
+    },
   },
   searchIcon: {
     width: theme.spacing(7),
@@ -57,34 +60,34 @@ const useStyles = makeStyles(theme => ({
     pointerEvents: "none",
     display: "flex",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   inputRoot: {
-    color: "inherit"
+    color: "inherit",
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 7),
     transition: theme.transitions.create("width"),
     width: "100%",
     [theme.breakpoints.up("md")]: {
-      width: 200
-    }
+      width: 200,
+    },
   },
   sectionDesktop: {
     display: "none",
     [theme.breakpoints.up("md")]: {
-      display: "flex"
-    }
+      display: "flex",
+    },
   },
   sectionMobile: {
     display: "flex",
     [theme.breakpoints.up("md")]: {
-      display: "none"
-    }
+      display: "none",
+    },
   },
   toolbar: {
-    justifyContent: "space-between"
-  }
+    justifyContent: "space-between",
+  },
 }));
 
 const Header = ({ title, backButton, onBackClick }) => {
@@ -92,11 +95,12 @@ const Header = ({ title, backButton, onBackClick }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const history = useHistory();
+  const isLoggedIn = useSelector(selectIsLoggedIn);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const handleProfileMenuOpen = event => {
+  const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -109,7 +113,7 @@ const Header = ({ title, backButton, onBackClick }) => {
     handleMobileMenuClose();
   };
 
-  const handleMobileMenuOpen = event => {
+  const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
@@ -171,7 +175,7 @@ const Header = ({ title, backButton, onBackClick }) => {
   );
 
   return (
-    <div classes={classes.test}>
+    <div classes={classes.noshrink}>
       <AppBar position="static">
         <Toolbar className={classes.toolbar}>
           {backButton && <BackButton onClick={onBackClick || history.goBack} />}
@@ -203,7 +207,8 @@ const Header = ({ title, backButton, onBackClick }) => {
             </IconButton>
           </div>
           */}
-          <div className={classes.sectionMobile}>
+          {isLoggedIn && <ProfileMenu />}
+          {/*<div className={classes.sectionMobile}>
             <IconButton
               aria-label="show more"
               aria-controls={mobileMenuId}
@@ -213,7 +218,7 @@ const Header = ({ title, backButton, onBackClick }) => {
             >
               <MoreIcon />
             </IconButton>
-          </div>
+        </div>*/}
         </Toolbar>
       </AppBar>
       {/*renderMobileMenu*/}

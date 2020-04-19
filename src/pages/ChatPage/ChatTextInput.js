@@ -6,10 +6,11 @@ import { useSelector } from "react-redux";
 
 import SendButton from "../../common/buttons/SendButton";
 import { selectUserId, selectUserName } from "../LoginPage/loginSlice";
+import { getClient } from "../../api/websocket";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   chatTextInput: {
-    flexShrink: 0
+    flexShrink: 0,
   },
   chatTextForm: {
     display: "flex",
@@ -19,43 +20,47 @@ const useStyles = makeStyles(theme => ({
     marginLeft: theme.spacing(1.5),
     marginTop: theme.spacing(1),
     "& .MuiOutlinedInput-root": {
-      borderRadius: "2.5rem"
-    }
+      borderRadius: "2.5rem",
+    },
   },
   inputField: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   sendButton: {
-    margin: "0 1rem"
-  }
+    margin: "0 1rem",
+  },
 }));
 
-const ChatTextInput = ({ websocket, chatId }) => {
+const ChatTextInput = ({ chatId }) => {
   const classes = useStyles();
   const [input, setInput] = React.useState("");
   const userId = useSelector(selectUserId);
   const userName = useSelector(selectUserName);
+  const websocket = getClient();
 
-  const handleChange = event => {
+  const handleChange = (event) => {
     setInput(event.target.value);
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
+    const toSend = input.trim();
+    if (toSend === "") return;
+
     const payload = {
       userId: userId,
       name: userName,
-      text: input
+      text: toSend,
     };
 
     setInput("");
 
     websocket.publish({
       destination: `/ws/app/chats/${chatId}/message`,
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
     });
   };
 
-  const handleKeyDown = event => {
+  const handleKeyDown = (event) => {
     if (event.keyCode === 13 && !event.shiftKey) {
       event.preventDefault();
       handleSubmit(event);
@@ -74,15 +79,16 @@ const ChatTextInput = ({ websocket, chatId }) => {
         <TextField
           className={classes.inputField}
           id="chat-text-input"
-          label="Message"
           value={input}
           onChange={handleChange}
+          placeholder="Write a message..."
           variant="outlined"
           multiline
           rowsMax="3"
           onSubmit={handleSubmit}
           onKeyDown={handleKeyDown}
           disabled={websocket === undefined}
+          InputLabelProps={{ disabled: true }}
         />
         <SendButton className={classes.sendButton} onClick={handleSubmit} />
       </form>
