@@ -1,4 +1,4 @@
-#SimpleChat
+# SimpleChat
 
 This is a Simple Chat Application. With it you can create chat rooms with other people. Features include Read Receipts and the ability to see when other people are online at the same time as you. The live chatting is done with WebSockets and this frontend communicates with a backend (source code here: https://github.com/davsan-0/simplechat-backend).
 
