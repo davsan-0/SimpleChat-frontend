@@ -48,11 +48,9 @@ const App = (props) => {
   useEffect(() => {
     const wsClient = getClient();
     if (isLoggedIn && wsClient === null) {
-      console.log("user ", userId);
       startWebsocket(dispatch, chats);
     } else {
       stopWebsocket();
-      console.log("WS Client deactivated");
     }
 
     if (!runOnce && isLoggedIn && Object.keys(chats).length > 0) {

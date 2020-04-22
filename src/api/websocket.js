@@ -15,15 +15,15 @@ export const getClient = () => {
 
 export function startWebsocket(dispatch, chats) {
   const wsClient = new Client({
-    brokerURL: "ws://192.168.0.8:8080/ws/chat",
+    brokerURL: process.env.REACT_APP_WS_URL,
     debug: function (str) {
       if (process.env.NODE_ENV === "development") {
         console.log(str);
       }
     },
-    reconnectDelay: 5000,
-    heartbeatIncoming: 4000,
-    heartbeatOutgoing: 4000,
+    reconnectDelay: 12000,
+    heartbeatIncoming: 10000,
+    heartbeatOutgoing: 10000,
   });
 
   wsClient.onConnect = function (frame) {
@@ -41,7 +41,6 @@ export function startWebsocket(dispatch, chats) {
       wsClient.subscribe(`/ws/topic/chats/${id}/online`, (message) => {
         const payload = JSON.parse(message.body);
         payload.chatId = id;
-        console.log("payload = ", payload);
         dispatch(setOnlineStatusForUserInChat(payload));
       });
     });

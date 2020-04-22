@@ -39,7 +39,6 @@ const StyledBadge = withStyles((theme) => ({
 
 const CustomAvatar = (props) => {
   const { isOnline } = props;
-  console.log("isOnline ", isOnline);
   const avatar = <Avatar {...props} />;
   if (isOnline) {
     return (
