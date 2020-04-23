@@ -45,6 +45,14 @@ export const getChatMessages = (chatId, sort) => {
   return api.get(`/chats/${chatId}/messages?sort=${sort}`, authHeader());
 };
 
+export const setLastRead = (chatId, messageId) => {
+  return api.put(
+    `/chats/${chatId}/lastmessageread`,
+    { message_id: messageId },
+    authHeader()
+  );
+};
+
 export const createNewChat = (name, participantIds) => {
   if (name === "") name = undefined;
   return api.post(

@@ -3,6 +3,7 @@ import Badge from "@material-ui/core/Badge";
 import Avatar from "@material-ui/core/Avatar";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
+import _ from "lodash";
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
@@ -39,7 +40,8 @@ const StyledBadge = withStyles((theme) => ({
 
 const CustomAvatar = (props) => {
   const { isOnline } = props;
-  const avatar = <Avatar {...props} />;
+  const avatarProps = _.omit(props, ["isOnline"]);
+  const avatar = <Avatar {...avatarProps} />;
   if (isOnline) {
     return (
       <StyledBadge

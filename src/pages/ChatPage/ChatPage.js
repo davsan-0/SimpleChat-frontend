@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import Header from "../../common/Header/Header";
-import { getChatWithId } from "../../api/rest";
+import { setLastRead } from "../../api/rest";
 import { getClient } from "../../api/websocket";
 import ChatTextInput from "./ChatTextInput";
 import ChatWindow from "./ChatWindow";
@@ -56,6 +56,7 @@ const ChatPage = () => {
   useEffect(() => {
     if (hasUnread) {
       sendReadReceipt(latestMessage.id);
+      setLastRead(id, latestMessage.id);
     }
 
     dispatch(setFocusedAndClearUnread(id));
@@ -68,6 +69,7 @@ const ChatPage = () => {
   useEffect(() => {
     if (focused && latestMessage?.author.id !== userId) {
       sendReadReceipt(latestMessage.id);
+      setLastRead(id, latestMessage.id);
     }
   }, [latestMessage]);
 

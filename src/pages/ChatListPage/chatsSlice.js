@@ -18,6 +18,7 @@ export const chatsSlice = createSlice({
           chat.name = chat.name.slice(0, chat.name.length - 2);
         }
         chat.participants = _.keyBy(chat.participants, (user) => user.id);
+        chat.hasUnread = Boolean(chat.unreadAmount);
         return chat;
       });
 

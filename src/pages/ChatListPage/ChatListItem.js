@@ -98,6 +98,7 @@ const ChatListItem = ({
 
     return others.map((el) => (
       <CustomAvatar
+        key={el.id}
         isOnline={Boolean(el.online)}
         alt={el.name}
         src={el.imageUrl}
@@ -123,12 +124,12 @@ const ChatListItem = ({
 };
 
 ChatListItem.propTypes = {
-  chatName: PropTypes.string.isRequired,
-  to: PropTypes.string.isRequired,
-  latestMessage: PropTypes.object.isRequired,
-  hasUnread: PropTypes.bool.isRequired,
-  unreadAmount: PropTypes.number.isRequired,
-  participants: PropTypes.array.isRequired,
+  chatName: PropTypes.string,
+  to: PropTypes.string,
+  latestMessage: PropTypes.object,
+  hasUnread: PropTypes.bool,
+  unreadAmount: PropTypes.number,
+  participants: PropTypes.array,
 };
 
 export default ChatListItem;

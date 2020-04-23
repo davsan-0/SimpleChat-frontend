@@ -5,8 +5,10 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+import { useSelector } from "react-redux";
 
 import { getAllUsers, createNewChat } from "../../../api/rest";
+import { selectUserId } from "../../LoginPage/loginSlice";
 
 const useStyles = makeStyles((theme) => ({
   createForm: {
@@ -30,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
 const CreateChatForm = React.forwardRef((props, ref) => {
   const classes = useStyles();
+  const userId = useSelector(selectUserId);
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState([]);
   const [nameInput, setNameInput] = useState("");
@@ -67,7 +70,8 @@ const CreateChatForm = React.forwardRef((props, ref) => {
       (async () => {
         getAllUsers(search).then((response) => {
           if (active) {
-            setOptions(response.data);
+            const options = response.data.filter((user) => user.id !== userId);
+            setOptions(options);
             setLoading(false);
             setOpen(true);
           }
