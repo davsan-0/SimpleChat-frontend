@@ -128,7 +128,8 @@ const Message = ({
             alt={author}
             src={imageUrl}
           />
-        )) || <div className={classes.avatar} />}
+        )) ||
+          (!isAuthor && <div className={classes.avatar} />)}
         <Paper
           variant="elevation"
           elevation={1}

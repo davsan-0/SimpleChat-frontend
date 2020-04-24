@@ -1,6 +1,8 @@
 import _ from "lodash";
 import { createSlice } from "@reduxjs/toolkit";
 
+import { playNotificationSound } from "../../common/notifications";
+
 export const chatsSlice = createSlice({
   name: "chats",
   initialState: {
@@ -38,6 +40,8 @@ export const chatsSlice = createSlice({
       const chatId = message.chatId;
       const authorId = message.author.id;
       const author = state.chats[chatId]?.participants[authorId];
+
+      author.lastReadMessage = undefined;
       message.author = author;
 
       if (state.chats[chatId]?.messages) {
@@ -53,6 +57,7 @@ export const chatsSlice = createSlice({
         state.chats[chatId].unreadAmount = state.chats[chatId].unreadAmount
           ? state.chats[chatId].unreadAmount + 1
           : 1;
+        playNotificationSound(); // Perhaps this should be refactored and moved somewhere else
       }
     },
     // Flag that determines if chat is currently focused
@@ -103,6 +108,19 @@ export const chatsSlice = createSlice({
         state.chats[chatId].participants[userId].online = online;
       }
     },
+    setChatIsFetching: (state, action) => {
+      const chatId = action.payload;
+      if (state.chats[chatId]) {
+        state.chats[chatId].fetching = true;
+      }
+    },
+    setChatHasFetched: (state, action) => {
+      const chatId = action.payload;
+      if (state.chats[chatId]) {
+        state.chats[chatId].fetching = false;
+        state.chats[chatId].hasFetched = true;
+      }
+    },
   },
 });
 
@@ -115,9 +133,12 @@ export const {
   reset,
   setReadReceiptForUser,
   setOnlineStatusForUserInChat,
+  setChatIsFetching,
+  setChatHasFetched,
 } = chatsSlice.actions;
 
 export const selectChats = (state) => state.chats.chats;
+export const selectChat = (id) => (state) => state.chats.chats[id];
 export const selectMessages = (id) => (state) =>
   state.chats.chats[id]?.messages;
 export const selectHasUnread = (id) => (state) =>

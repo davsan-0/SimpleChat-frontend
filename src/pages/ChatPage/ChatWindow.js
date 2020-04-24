@@ -10,7 +10,11 @@ import {
   setChatMessages,
   selectMessages,
   selectParticipants,
+  selectChat,
+  setChatIsFetching,
+  setChatHasFetched,
 } from "../ChatListPage/chatsSlice";
+import CenteredSpinner from "../../common/CenteredSpinner";
 
 const useStyles = makeStyles((theme) => ({
   chatWindow: {
@@ -28,6 +32,7 @@ const ChatWindow = ({ id }) => {
   const classes = useStyles();
   const scrollRef = useRef();
   const userId = useSelector(selectUserId);
+  const chat = useSelector(selectChat(id));
   const participants = useSelector(selectParticipants(id));
   const messages = useSelector(selectMessages(id));
   const dispatch = useDispatch();
@@ -77,19 +82,31 @@ const ChatWindow = ({ id }) => {
   };
 
   useEffect(() => {
-    getChatMessages(id, "asc").then((res) => {
-      dispatch(setChatMessages(res.data));
-    });
+    if (!chat?.hasFetched) {
+      dispatch(setChatIsFetching(id));
+      getChatMessages(id, "asc").then((res) => {
+        dispatch(setChatHasFetched(id));
+        dispatch(setChatMessages(res.data));
+      });
+    }
   }, []);
 
   useEffect(() => {
     scrollRef.current.scrollTop = scrollRef.current.scrollHeight; // Sets the scroll bar to bottom of container
-  }, [messages]);
+  }, [messages, participants]);
 
   return (
-    <div className={classes.chatWindow} ref={scrollRef}>
-      {messages && renderMessages(messages)}
-    </div>
+    <>
+      {(chat?.fetching && (
+        <div style={{ flexGrow: 1 }}>
+          <CenteredSpinner />
+        </div>
+      )) || (
+        <div className={classes.chatWindow} ref={scrollRef}>
+          {messages && renderMessages(messages)}
+        </div>
+      )}
+    </>
   );
 };
 
